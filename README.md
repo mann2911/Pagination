@@ -1,70 +1,30 @@
-# Getting Started with Create React App
+ 
+  
+  
+    The problem is : Let's say there is one component like counter which we had added along with our pagination component;
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+    Now when we use pagination (goes from one page to another) then the counter component is also geeting render.
 
-## Available Scripts
+    Real life senario : instead of counter component, we do have addToCart component and every time while we use pagination it will render.
+    so to avoid that we need to use useCallback in this.
+  
 
-In the project directory, you can run:
+    Solution :
+    we need to optimize our app so we would do following steps.
 
-### `npm start`
+    1. React.memo in counter component ->
+       what is React.memo -> React.memo is used to memoize entire components based on their props, preventing re-renders when props haven't changed.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+      -> so by using this we would prevent the re-rendering. but there is one problem
+      we are passing 2 props (count,incrementCounter) -> so by using memo we will prevent the state variable but every time app.js render it will make a new copy of incrementCounter. so the issue will still persist due to that.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+     2. -> so now we need to optimize the function calling also.
+      we will do that using useCallback -> useCallback is to prevent unnecessary re-creations of callback functions
 
-### `npm test`
+      pl see the useCallack hook in line 29.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    3. useMemo (not used in current implementation) is used to memoize the result of a computation or calculation within a component and allows you to specify dependencies for when the memoized value should be recalculated.
+        bascially when a function takes more time to perform than we can use useMemo and call whenever it needed.
+        eg there is one long listing of data in one part in this page. we do not need to recalculate when we do pagination, then we will wrap it with useMemo.
+    
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
